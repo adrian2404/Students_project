@@ -1,5 +1,7 @@
-+*.pyc
-+*~
-+*.egg-info
-+*.mo
-+*.egg
+*.pyc
+*~
+*.egg-info
+*.mo
+*.egg
+.DS_Store
+.DS_Store?
