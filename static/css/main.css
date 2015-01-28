@@ -1,0 +1,27 @@
+/* Global styles */
+.alert{
+	margin: 10px 0 5px 0;
+}
+
+#group-selector{
+	margin-top: 30px;
+}
+
+#group-selector select{
+	height: 30px;
+	width: 80%;
+	margin: 0%;
+	background-color: #ffffff;
+	border: 1px solid #cccccc;
+	line-height: 30px;
+	color: #555555;
+}
+h1,h2,h3,h4,h5,h6{
+	font-weight: bold;
+}
+
+/* Footer styles */
+#footer{
+	border-top: 1px solid #ddd;
+	padding-top: 5px;
+}
