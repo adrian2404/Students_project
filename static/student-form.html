@@ -1,0 +1,95 @@
+<!DOCTYPE html>
+<html>
+	<head>
+		<meta charset="UTF-8"/>
+		<title>Сервіс обліку студентів</title>	
+		<meta name="description" value="Сервіс обліку студетів начального закладу"/>
+		<!-- Include Styles -->
+		<link rel="stylesheet" href="https://cdn.jsdelivr.net/bootstrap/3.3.0/css/bootstrap.min.css">
+		<link rel="stylesheet" href="./css/main.css">
+		<!--<style type="text/css">.col-xs-12, .col-xs-4, .col-xs-8 {border:1px solid red;}</style>-->
+	</head>
+	<body>
+		<div class="container">
+			<!-- Start header-->
+			<div class="row" id="header">
+				<div class="col-xs-12">
+					<h2>Форма редагування студента</h2>
+				</div>
+			</div>
+			<!-- End header-->
+
+			<!-- Start form-->
+			<div class="row" id="form">
+				<div class="col-sx-8">
+					<form action="" method="post" class="form-horizontal">
+						<div class="form-group">
+						    <label for="name" class="col-sm-2 control-label">Ім'я<span class="red-star">*</span></label>
+						    <div class="col-sm-3">
+						    	<input type="text" class="form-control" id="inputname" placeholder="Адріан">
+						    </div>
+						</div>
+						<div class="form-group">
+						    <label for="name" class="col-sm-2 control-label">По-батькові</label>
+						    <div class="col-sm-3">
+						    	<input type="text" class="form-control" id="inputpname" placeholder="Володиморович">
+						    </div>
+						</div>
+						<div class="form-group">
+						    <label for="name" class="col-sm-2 control-label">Прізвище<span class="red-star">*</span></label>
+						    <div class="col-sm-3">
+						    	<input type="text" class="form-control" id="inputsurname" placeholder="Яворський">
+						    </div>
+						</div>
+						<div class="form-group">
+						    <label for="name" class="col-sm-2 control-label">Номер білету<span class="red-star">*</span></label>
+						    <div class="col-sm-3">
+						    	<input type="text" class="form-control" id="inputticket" placeholder="123467">
+						    </div>
+						</div>
+						<div class="form-group">
+						    <label for="name" class="col-sm-2 control-label">Дата народження</label>
+						    <div class="col-sm-3">
+						    	<input type="text" class="form-control" id="inputbirthdate" placeholder="07-09-1995">
+						    </div>
+						</div>
+						<div class="form-group">
+				            <label class="col-sm-2 control-label">Фотографія</label>
+				            <div class="col-sm-6">
+				              <p class="help-block">Наразі: <a href="./img/me.jpg">./img/me.jpg</a></p>
+				              <input type="file" name="photo" />
+				              <a  href="#" role="button">Очистити</a>
+				            </div>
+			          	</div>
+			          	<div class="form-group" id="group-selector">
+						    <label for="name" class="col-sm-2 control-label">Група<span class="red-star">*</span></label>
+						    <div class="col-sm-3">
+						    	<select>
+									<option value="">КН-30</option>
+									<option value="">КН-31</option>
+									<option value="">КН-32</option>
+								</select>
+						    </div>
+						</div>
+						<div class="form-group">
+						    <label for="name" class="col-sm-2 control-label">Додаткові нотатки</label>
+						    <div class="col-sm-3">
+						    	<textarea class="form-control" rows="3" cols="3">Коментарі</textarea>
+						    </div>
+						</div>
+					</form>
+				</div>
+			</div>
+			<div class="row" id="bt-block">
+				<div class="col-xs-5">
+					 <button  form="edit-student" type="submit" class="btn btn-primary">Зберегти</button>
+					  <a href="#">Скасувати</a>
+				</div>
+			</div>
+		</div>
+		
+		<!-- Javascripts Section -->
+		<script src="http://cdnjs.cloudflare.com/ajax/libs/jquery/2.1.1/jquery.js"></script>
+		<script src="https://cdn.jsdelivr.net/bootstrap/3.3.0/js/bootstrap.min.js"></script>	
+	</body>
+</html>
