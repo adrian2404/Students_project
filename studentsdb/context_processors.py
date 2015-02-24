@@ -1,2 +1,5 @@
+# -*- coding: utf-8 -*-
+
 def students_proc(request):
-	return {'PORTAL_URL':'http://localhost:8000'}
+	current_uri = '{scheme}://{host}'.format(scheme=request.scheme,host=request.get_host())
+	return {'PORTAL_URL':current_uri}
