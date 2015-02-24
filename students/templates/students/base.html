@@ -13,6 +13,7 @@
 	<body>
 		<!--Start conatiner -->
 		<div class="container">
+			{% block header %}
 			<!-- Start Header -->
 			<div class="row" id="header">
 				<!--Logo-->
@@ -30,17 +31,23 @@
 					</select>
 				</div>
 			</div>
+			{% endblock header%}
 			<!--End header-->
 			<!--Subheader-->
+			{% block subheader%}
 			<div class="row" id="subheader">
 				<div class="col-xs-12"> 
 					<ul class="nav nav-tabs">
-					  <li role="presentation" {%if '/' == request.path %}class="active"{%endif%}><a href="{% url "home" %}">Студенти</a></li>
-					  <li role="presentation" {%if '/journal' in request.path %}class="active"{%endif%}><a href="{% url "journal"%}">Відвідування</a></li>
-					  <li role="presentation" {% if '/groups' in request.path  %}class="active"{%endif%}><a href="{% url "groups_list"%}">Групи</a></li>
+					{% url "home" as home %}
+					  <li role="presentation" {%if home == request.path %}class="active"{%endif%}><a href="{% url "home" %}">Студенти</a></li>
+					  {% url "journal" as journal %}
+					  <li role="presentation" {%if journal in request.path %}class="active"{%endif%}><a href="{% url "journal"%}">Відвідування</a></li>
+					  {% url "groups_list" as groups_list %}
+					  <li role="presentation" {% if groups_list in request.path  %}class="active"{%endif%}><a href="{% url "groups_list"%}">Групи</a></li>
 					</ul>
 				</div>	
 			</div>
+			{%endblock subheader%}
 			<!--End subheader-->
 			<!-- Start main page content-->
 			<div class="row" id="content-columns">
@@ -54,12 +61,14 @@
 			</div>
 			<!--End main page content-->
 			<!--Start footer-->
+			{%block footer%}
 			<div class="row" id="footer">
 				<div class="col-xs-12">
 					&copy; 2014 Сервіс обліку студентів
 				</div>
 			<!-- End footer-->	
 			</div>
+			{%endblock footer%}
 		</div>
 		<!--End containe-->
 		<!-- Javascripts Section -->
