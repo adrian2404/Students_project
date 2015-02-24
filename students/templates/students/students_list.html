@@ -7,7 +7,7 @@
 {% load static from staticfiles %}
 
 {%block content%}
-<a href="{% url "students_add" %}" class="btn btn-primary">Додати Студента</a> {{request.build_absolute_uri}}
+<a href="{% url "students_add" %}" class="btn btn-primary">Додати Студента</a>
 					{% if students %}
 					<!-- Start table-->
 					<table class="table"> 
