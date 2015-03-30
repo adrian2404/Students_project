@@ -112,13 +112,13 @@ class Exam(models.Model):
 
     teacher = models.CharField(
     max_length=256,
-    blank=True,
+    blank=False,
     null=True,
     verbose_name = "Викладач")
 
     groups = models.ForeignKey(
     'Group',
-    blank=True,
+    blank=False,
     verbose_name='Група',
     null=True)
 

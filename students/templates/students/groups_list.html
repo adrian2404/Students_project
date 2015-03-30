@@ -37,7 +37,7 @@
 							<tr>
 								<td>{{group.id}}</td>
 								<td><a href="{% url "groups_edit" group.id %}">{{group.title}}</a></td>
-								<td><a href="{% url "students_edit" group.leader.id %}">{{group.leader}}</a></td>
+								<td>{% if group.leader %}<a href="{% url "students_edit" group.leader.id %}">{{group.leader}}</a>{% else %}Немає старости{% endif %}</td>
 								<td>
 									<div class="btn-group">
 									  <button type="button" class="btn btn-default dropdown-toggle" data-toggle="dropdown" aria-expanded="false">
@@ -61,24 +61,12 @@
 						<p>Поки немає груп у базі</p>
 					{% endif%}
 					<!-- Start pagination-->
-					{% if groups.has_other_pages %}
-					{% with order_by=request.GET.order_by reverse=request.GET.reverse %}
-					<nav>
-					  <ul class="pagination">
-						<li>
-						  <a href="{% url "groups_list" %}?page=1&amp;order_by={{ order_by }}&amp;reverse={{ reverse }}">&laquo;</a>
-						</li>
-						{% for g in groups.paginator.page_range %}
-						<li {% if g == groups.number %}class="active"{% endif %} ><a href="{% url "groups_list" %}?page={{g}}&amp;order_by={{ order_by }}&amp;reverse={{ reverse }}">{{g}}</a></li>
-						{% endfor %}
-						<li>
-						  <a href="{% url "groups_list" %}?page={{ groups.paginator.num_pages }}&amp;order_by={{ order_by }}&amp;reverse={{ reverse }}">&raquo;</a>
-						  </a>
-						</li>
-					  </ul>
-					</nav>
-					{% endwith %}
-					{% endif %}
+					<div>
+						{% with object_list=groups %}
+                  			{% include "students/pagination.html" %}
+          				{% endwith %}
+					</div>
+					
 					<!-- End pagination-->
 
 {%endblock content%}
