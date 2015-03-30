@@ -15,7 +15,7 @@ def students_list(request):
 	students=students.order_by('last_name')
 	if request.GET.get('order_by', '') == '':
 	    request.GET.order_by = 'last_name'
-	order_by = request.GET.get('order_by', '')
+	#order_by = request.GET.get('order_by', '')
     
 	if order_by in ('last_name','first_name','ticket','id'):
 	    students=students.order_by(order_by)

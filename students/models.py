@@ -3,92 +3,127 @@ from django.db import models
 
 # Create your models here.
 class Student(models.Model):
-	"""Student model"""
+    """Student model"""
 
-	class Meta(object):
-		verbose_name=u"Студент"
-		verbose_name_plural= "Студенти" 
-
-
-	first_name = models.CharField(
-		max_length=256,
-		blank=False,
-		verbose_name=u"Ім'я")
+    class Meta(object):
+        verbose_name=u"Студент"
+        verbose_name_plural= "Студенти" 
 
 
-	last_name = models.CharField(
-		max_length=256,
-		blank=False,
-		verbose_name=u"Прізвище")
+    first_name = models.CharField(
+    max_length=256,
+    blank=False,
+    verbose_name=u"Ім'я")
 
 
-	middle_name = models.CharField(
-		max_length=256,
-		blank=True, 
-		verbose_name=u"По-батькові",
-		default='')
+    last_name = models.CharField(
+    max_length=256,
+    blank=False,
+    verbose_name=u"Прізвище")
 
 
-	birthday = models.DateField(
-		blank=False,
-		verbose_name=u"Дата народження",
-		null=True)
+    middle_name = models.CharField(
+    max_length=256,
+    blank=True, 
+    verbose_name=u"По-батькові",
+    default='')
 
 
-	photo = models.ImageField(
-		blank=True,
-		verbose_name=u"Фото",
-		null=True)
+    birthday = models.DateField(
+    blank=False,
+    verbose_name=u"Дата народження",
+    null=True)
 
 
-	ticket = models.CharField(
-		max_length=256,
-		blank=False,
-		verbose_name=u"Білет")
+    photo = models.ImageField(
+    blank=True,
+    verbose_name=u"Фото",
+    null=True)
 
-	student_group = models.ForeignKey('Group',
-		verbose_name="Група",
-		blank=False,
-		null=True,
-		on_delete=models.PROTECT)
-	
-	notes = models.TextField(
-		blank=True,
-		verbose_name=u"Нотатки")
 
-	def __unicode__(self):
-		return u"%s %s" % (self.first_name, self.last_name)
-	 
+    ticket = models.CharField(
+    max_length=256,
+    blank=False,
+    verbose_name=u"Білет")
+
+    student_group = models.ForeignKey('Group',
+    verbose_name="Група",
+    blank=False,
+    null=True,
+    on_delete=models.PROTECT)
+    
+    notes = models.TextField(
+    blank=True,
+    verbose_name=u"Нотатки")
+
+    def __unicode__(self):
+        return u"%s %s" % (self.first_name, self.last_name)
+     
 
 class Group(models.Model):
-	"""Group model"""
+    """Group model"""
 
-	class Meta(object):
-		verbose_name=u"Група"
-		verbose_name_plural= "Групи"
-
-
-
-	title = models.CharField(
-		max_length=256,
-		blank=False,
-		verbose_name=u"Назва")
-
-	leader=models.OneToOneField('Student',
-		verbose_name="Староста",
-		blank=True,
-		null=True, 
-		on_delete=models.SET_NULL) 
+    class Meta(object):
+        verbose_name=u"Група"
+        verbose_name_plural= "Групи"
 
 
-	notes = models.TextField(
-		blank=True,
-		verbose_name=u"Нотатки")
 
-	def __unicode__(self):
-		if self.leader:
-			return u"%s (%s %s)" % (self.title, self.leader.first_name, self.leader.last_name)
-		else:
-			return u"%s" % (self.title)
+    title = models.CharField(
+    max_length=256,
+    blank=False,
+    verbose_name=u"Назва")
 
-	
+    leader=models.OneToOneField('Student',
+    verbose_name="Староста",
+    blank=True,
+    null=True, 
+    on_delete=models.SET_NULL) 
+
+
+    notes = models.TextField(
+    blank=True,
+    verbose_name=u"Нотатки")
+
+    def __unicode__(self):
+        if self.leader:
+            return u"%s (%s %s)" % (self.title, self.leader.first_name, self.leader.last_name)
+        else:
+            return u"%s" % (self.title)
+
+# Create your models here.
+class Exam(models.Model):
+    """Exam model"""
+
+    class Meta(object):
+        verbose_name=u"Екзамен"
+        verbose_name_plural= "Екзамени" 
+
+
+    name = models.CharField(
+    max_length=256,
+    blank=False,
+    verbose_name=u"Назва")
+
+    date = models.DateTimeField(
+    blank=False,
+    verbose_name=u"Дата і час проведення",
+    null=True)
+
+    teacher = models.CharField(
+    max_length=256,
+    blank=True,
+    null=True,
+    verbose_name = "Викладач")
+
+    groups = models.ForeignKey(
+    'Group',
+    blank=True,
+    verbose_name='Група',
+    null=True)
+
+    def __unicode__(self):
+        if self.teacher:
+            return u"%s (%s)" % (self.name, self.teacher)
+        else:
+            return u"%s" % (self.name)
