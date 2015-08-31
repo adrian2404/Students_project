@@ -46,6 +46,10 @@
 					  <li role="presentation" {% if groups_list in request.path  %}class="active"{%endif%}><a href="{% url "groups_list"%}">Групи</a></li>
 					  {% url "exams_list" as exams_list %}
 					  <li role="presentation" {% if exams_list in request.path  %}class="active"{%endif%}><a href="{% url "exams_list"%}">Екзамени</a></li>
+					  {% url "teachers_list" as teachers %}
+					   <li role="presentation" {% if teachers in request.path  %}class="active"{%endif%}><a href="{% url "teachers_list" %}">Викладачі</a></li>
+					  {% url "contact_admin" as contact_admin %}
+					   <li role="presentation" {% if contact_admin in request.path  %}class="active"{%endif%}><a href="{% url "contact_admin" %}">Зворотній зв'язок</a></li>
 					</ul>
 				</div>	
 			</div>
@@ -54,9 +58,11 @@
 			<!-- Start main page content-->
 			<div class="row" id="content-columns">
 				<div class="col-xs-12" id="content-column">
-					{%comment Not used so far%}
-					<div class="alert alert-warning" role="alert">Студент успішно доданий</div> 
-					{%endcomment%}
+					{% block status_message %}
+					{% if request.GET.status_message %}
+					<div class="alert alert-warning" role="alert">{{request.GET.status_message}}</div> 
+					{% endif %}
+					{% endblock %}
 					<h2>{% block title %}{% endblock title %}</h2>
 					{% block content %}{% endblock content %}
 				</div>

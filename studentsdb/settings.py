@@ -40,6 +40,7 @@ INSTALLED_APPS = (
     'django.contrib.sessions',
     'django.contrib.messages',
     'django.contrib.staticfiles',
+    'crispy_forms',
     'students',
 )
 
@@ -51,7 +52,10 @@ MIDDLEWARE_CLASSES = (
     'django.contrib.auth.middleware.SessionAuthenticationMiddleware',
     'django.contrib.messages.middleware.MessageMiddleware',
     'django.middleware.clickjacking.XFrameOptionsMiddleware',
+    'django.middleware.locale.LocaleMiddleware',
 )
+
+CRISPY_TEMPLATE_PACK = 'bootstrap3'
 
 ROOT_URLCONF = 'studentsdb.urls'
 
@@ -80,6 +84,7 @@ USE_L10N = True
 USE_TZ = True
 
 
+
 # Static files (CSS, JavaScript, Images)
 # https://docs.djangoproject.com/en/1.7/howto/static-files/
 
@@ -91,4 +96,15 @@ TEMPLATE_CONTEXT_PROCESSORS = \
     global_settings.TEMPLATE_CONTEXT_PROCESSORS + (
     "django.core.context_processors.request",
     "studentsdb.context_processors.students_proc",
+    'django.contrib.messages.context_processors.messages',
     )
+
+# email settings
+ # please, set here you smtp server details and your admin email
+ADMIN_EMAIL = 'adrian.yavorski@gmail.com'
+EMAIL_HOST = 'smtp.gmail.com'
+EMAIL_PORT = '465'
+EMAIL_HOST_USER = 'adrian.yavorski@gmail.com'
+EMAIL_HOST_PASSWORD = 'adrian_yavorski'
+EMAIL_USE_TLS = False
+EMAIL_USE_SSL = True

@@ -1,14 +1,14 @@
 {% extends "students/base.html" %}
 
-{% block meta_title %}Список студентів {% endblock meta_title %}
+{% block meta_title %}Список викаладачів {% endblock meta_title %}
 
-{% block title %}Список студентів{% endblock title %}
+{% block title %}Список викладачів{% endblock title %}
 
 {% load static from staticfiles %}
 
 {%block content%}
-<a href="{% url "students_add" %}" class="btn btn-primary">Додати Студента</a>
-					{% if students %}
+<a href="{% url "teachers_add" %}" class="btn btn-primary">Додати Викладача</a>
+					{% if teachers %}
 					<!-- Start table-->
 					<table class="table"> 
 					{% with order_by=request.GET.order_by reverse=request.GET.reverse %}
@@ -67,7 +67,6 @@
 											    <li><a href="{% url "students_edit" student.id %}">Редагувати</a></li>
 											    <li><a href="/journal/{{students.id}}">Відвідування</a></li>
 											    <li><a href="{% url "students_delete" student.id %}">Видалити</a></li>
-											    <li><a href="{% url "students_delete_several"  %}">Видалити декількох</a></li>
 											
 										  </ul>
 									</div>
@@ -79,7 +78,7 @@
 					 {% endwith %}
 					<!-- End table-->
 					{% else%}
-						<p>Поки немає студнетів у базі</p>
+						<p>Поки немає викладачів у базі</p>
 					{% endif%}
 					<!-- Start pagination-->
 					<div>

@@ -1,0 +1,36 @@
+{% extends "students/base.html" %}
+
+{% block meta_title %}Видалити студента {% endblock meta_title %}
+
+{% block title %}Видалити студента{% endblock title %}
+
+{% load static from staticfiles %}
+
+{%block content%}
+
+<form action="{% url "students_delete_several"  %}" method="POST">
+	{% csrf_token %}
+
+	<p> Ви дійсно хочете видалати наступних студентів:  </p>
+	{% for object in objects %}
+	<ul>
+		<li> 
+			{%if object.photo %}
+				<img class="img-circle" src="{{ object.photo.url }}" height="30" width="30">
+			{%else%}
+				<img class="img-circle" src="{% static "img/default-user.png" %}" height="30" width="30">
+			{%endif%}
+			{{object.first_name}} {{object.last_name}}
+		</li>
+		<input type = 'hidden' name = 'ids' value = {{object.id}}></input>	
+	</ul>
+	{%endfor %}
+	<input type="submit" value="Так" name="delete_button" class="btn btn-danger"/>
+	<input type="submit" value="Ні" name="cancel_button" class="btn btn-primary"/>
+
+
+	
+</form>
+
+
+{%endblock content%}

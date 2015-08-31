@@ -21,9 +21,9 @@ class Exam(models.Model):
     verbose_name=u"Дата і час проведення",
     null=True)
 
-    teacher = models.CharField(
+    exam_teacher = models.OneToOneField('Teacher',
     max_length=256,
-    blank=False,
+    blank=True,
     null=True,
     verbose_name = "Викладач")
 

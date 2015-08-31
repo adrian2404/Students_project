@@ -7,7 +7,9 @@
 {% load static from staticfiles %}
 
 {%block content%}
-<a href="{% url "students_add" %}" class="btn btn-primary">Додати Студента</a>
+<form method="GET" enctype="multipart/form-data" action={% url 'students_delete_several' %}>
+<button class="btn btn-primary" type="submit" name="delete_button1">Видалити студентів</button>
+
 					{% if students %}
 					<!-- Start table-->
 					<table class="table"> 
@@ -40,7 +42,7 @@
 								</a>
 								</th>
 								
-								<th>Дії</th> 
+								<th>Видалити</th> 
 							</tr>
 						</thead>
 						<tbody>
@@ -58,19 +60,7 @@
 								<td><a href="{% url "students_edit" student.id %}">{{student.first_name}}</a></td>
 								<td><a href="#">{{student.ticket}}</a></td>
 								<td>
-									<div class="btn-group">
-									  <button type="button" class="btn btn-default dropdown-toggle" data-toggle="dropdown" aria-expanded="false">
-									    Дії 
-									    <span class="caret"></span>
-									  </button>
-										  <ul class="dropdown-menu" role="menu">
-											    <li><a href="{% url "students_edit" student.id %}">Редагувати</a></li>
-											    <li><a href="/journal/{{students.id}}">Відвідування</a></li>
-											    <li><a href="{% url "students_delete" student.id %}">Видалити</a></li>
-											    <li><a href="{% url "students_delete_several"  %}">Видалити декількох</a></li>
-											
-										  </ul>
-									</div>
+									<input type="checkbox" name="chosen" value= {{student.id}}> 
 								</td>
 							</tr> 
 							{% endfor %}
@@ -88,5 +78,6 @@
           {% endwith %}
 					</div>
 					<!-- End pagination-->
+</form>
 
 {%endblock content%}
