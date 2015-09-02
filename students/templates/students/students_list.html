@@ -84,8 +84,9 @@
 					<!-- Start pagination-->
 					<div>
 					{% with object_list=students %}
-                  {% include "students/pagination.html" %}
-          {% endwith %}
+                  		{% include "students/pagination.html" %}
+          			{% endwith %}
+          			{% block pagination %}{% endblock pagination %}
 					</div>
 					<!-- End pagination-->
 
