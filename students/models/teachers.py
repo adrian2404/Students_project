@@ -40,16 +40,13 @@ class Teacher(models.Model):
     verbose_name=u"Фото",
     null=True)
 
-    exam = models.ForeignKey(Exam,
-        max_length=256,
-        blank=True,
-        verbose_name="Екзамен")
 
     subject = models.CharField(
     max_length=256,
-    blank=False,
+    blank=True,
+    null=True,
     verbose_name=u"Предмет")
 
 
     def __unicode__(self):
-        return u"%s (%s %s)" % (self.title, self.leader.first_name, self.leader.last_name)
+        return u"%s %s" % (self.first_name, self.last_name)
