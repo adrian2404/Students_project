@@ -23,12 +23,12 @@
 								</a>
 								</th>
 								<th>
-								Дата і час проведення
+								<a href="{% url "exams_list" %}?order_by=date{% if order_by == 'date' and reverse != '1' %}&amp;reverse=1 {% endif %}">Дата і час проведення{% if order_by == 'date'  and reverse != '1' %}&uarr;{%  elif order_by == 'date'  and reverse == '1'  %} &darr; {%endif%}
 								</a>
 								</th>
 								
 								<th>
-								<a href="{% url "exams_list" %}?order_by=teacher{% if order_by == 'teacher' and reverse != '1' %}&amp;reverse=1 {% endif %}">Викладач{% if order_by == 'teacher'  and reverse != '1' %}&uarr;{%  elif order_by == 'teacher'  and reverse == '1'  %} &darr; {%endif%}
+								<a href="{% url "exams_list" %}?order_by=exam_teacher{% if order_by == 'exam_teacher' and reverse != '1' %}&amp;reverse=1 {% endif %}">Викладач{% if order_by == 'exam_teacher'  and reverse != '1' %}&uarr;{%  elif order_by == 'exam_teacher'  and reverse == '1'  %} &darr; {%endif%}
 								</a>
 								</th>
 
@@ -44,10 +44,10 @@
 							{% for exam in exams %}
 							<tr>
 								<td>{{exam.id}}</td>
-								<td><a href="{% url "exams_edit" exam.id %}">{{exam.name}}</a></td>
-                                <td>{{exam.date}}</td>
-                                <td><a href="#">{{exam.teacher}}</a></td>
-								<td><a href="#">{{exam.groups}}</a></td>
+								<td><a href="{% url "exams_edit" exam.id %}" class="edit-form-link">{{exam.name}}</a></td>
+                                <td>{{exam.date|date:"d.m.Y, H:i"}}</td>
+                                <td>{% if exam.exam_teacher %}<a href="{% url "teachers_edit" exam.exam_teacher.id %}" class="edit-form-link">{{exam.exam_teacher}} </a>{% else %}Нема викладача{% endif %}</td>
+								<td><a href="{% url "groups_edit" exam.groups.id %}" class="edit-form-link">{{exam.groups}}</a></td>
 								<td>
 									<div class="btn-group">
 									  <button type="button" class="btn btn-default dropdown-toggle" data-toggle="dropdown" aria-expanded="false">
@@ -70,26 +70,13 @@
 					{% else%}
 						<p>Поки немає екзаменів у базі</p>
 					{% endif%}
-                    <div>
-                    {% with object_list=exams %}
-                        {% include "students/pagination.html" %}
-                    {% endwith %}
-                    </div>
 					<!-- Start pagination-->
-					<!-- {% if students.has_other_pages %}
-					{% with order_by=request.GET.order_by reverse=request.GET.reverse %}
-					<nav>
-					  <ul class="pagination">
-					    <li><a href="{% url "home" %}?page=1&amp;order_by={{ order_by }}&amp;reverse={{ reverse }}">&laquo;</a></li>
-					    {% for p in students.paginator.page_range %}
-					    <li {% if students.number == p %} class="active" {%endif%}><a href="{% url "home" %}?page={{p}}&amp;order_by={{ order_by }}&amp;reverse={{ reverse }}" >{{p}}</a></li>
-					    {% endfor %}
-					    <li><a href="{% url "home" %}?page={{students.paginator.num_pages}}&amp;order_by={{ order_by }}&amp;reverse={{ reverse }}">&raquo;</a></li>
-					  </ul>
-					</nav>
-
-					{%endwith%}
-					{% endif %} -->
+					<div>
+						{% with object_list=exams %}
+                {% include "students/pagination.html" %}
+          	{% endwith %}
+          	{% block pagination %}{% endblock pagination %}
+					</div>
 					<!-- End pagination-->
 
 {%endblock content%}
