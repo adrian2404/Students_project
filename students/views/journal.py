@@ -9,11 +9,18 @@ from django.core.urlresolvers import reverse
 from django.views.generic.base import TemplateView
 
 from ..models import MonthJournal, Student
-from ..util import paginate
+from ..util import paginate, get_current_group
 
 
 class JournalView(TemplateView):
     template_name = 'students/journal.html'
+
+    # def get_queryset(self):
+    #     qs  = super(Student.objects.all(), self).get_queryset()
+
+    #     import pdb; pdb.set_trace();
+
+    #     return qs.order_by('id')
 
     def get_context_data(self, **kwargs):
         # get context data from TemplateView class
@@ -51,7 +58,13 @@ class JournalView(TemplateView):
         # get all students from database, or just one if we need to
         # display journal for one student; also check if we need to
         # filter by group
-        queryset = Student.objects.all().order_by('last_name')
+        current_group = get_current_group(self.request)
+        if current_group:
+            queryset = Student.objects.filter(student_group = current_group)
+        elif kwargs.get('pk'):
+            queryset = [Student.objects.get(pk=kwargs['pk'])]
+        else:
+            queryset = Student.objects.all().order_by('ticket')
 
         # url to update student presence, for form post
         update_url = reverse('journal')
@@ -93,3 +106,29 @@ class JournalView(TemplateView):
         # finally return updated context
         # with paginated students
         return context
+
+    def post(self, request, *args, **kwargs):
+        data = request.POST
+
+        #prepare student, dates and presence data
+        current_date = datetime.strptime(data['date'], '%Y-%m-%d').date()
+        month = date(current_date.year, current_date.month, 1)
+
+        present = data['present'] and True or False
+        student = Student.objects.get(pk=data['pk'])
+
+
+        #get or create journal object for given student and month
+
+        journal = MonthJournal.objects.get_or_create(student=student, date = month)[0]
+
+        #set new presence on  journal for given student and save result
+        setattr(journal, 'present_day%d' % current_date.day, present)
+        journal.save()
+        
+        #return success status
+        # import pdb; pdb.set_trace()
+        response = JsonResponse({'key' : 'success'})
+        return response
+
+    
