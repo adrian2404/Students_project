@@ -21,7 +21,7 @@ class Exam(models.Model):
     verbose_name=u"Дата і час проведення",
     null=True)
 
-    exam_teacher = models.OneToOneField('Teacher',
+    exam_teacher = models.ForeignKey('Teacher',
     max_length=256,
     blank=True,
     null=True,
@@ -33,8 +33,12 @@ class Exam(models.Model):
     verbose_name='Група',
     null=True)
 
+    notes = models.TextField(
+    blank=True,
+    verbose_name=u"Нотатки")
+
     def __unicode__(self):
-        if self.teacher:
-            return u"%s (%s)" % (self.name, self.teacher)
+        if self.exam_teacher:
+            return u"%s (%s %s)" % (self.name, self.exam_teacher.first_name, self.exam_teacher.last_name)
         else:
             return u"%s" % (self.name)
