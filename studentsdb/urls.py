@@ -4,6 +4,9 @@ from django.contrib.staticfiles.urls import staticfiles_urlpatterns
 from .settings import MEDIA_ROOT, DEBUG
 
 from students.views.students import StudentUpdateView, StudentCreateView, StudentDeleteView
+from students.views.groups import GroupList, GroupAddView, GroupUpdateView,GroupDeleteView 
+from students.views.exams import ExamList, ExamAddView, ExamEditView, ExamDeleteView
+from students.views.teachers import TeacherList, TeacherAddView, TeacherUpdateView, TeacherDeleteView
 from students.views.contact_admin import ContactView
 from students.views.journal import JournalView
 
@@ -23,34 +26,34 @@ urlpatterns = patterns('',
     url(r'^admin/', include(admin.site.urls)),
 
     #Group urls
-    url(r'^groups/$', 'students.views.groups.groups_list',name='groups_list'),
+    url(r'^groups/$', GroupList.as_view(), name='groups_list'),
 
-    url(r'^groups/add/$', 'students.views.groups.groups_add',name='groups_add'),
+    url(r'^groups/add/$', GroupAddView.as_view(), name='groups_add'),
 
-    url(r'^groups/(?P<gid>\d+)/edit/$', 'students.views.groups.groups_edit',name='groups_edit'),
+    url(r'^groups/(?P<pk>\d+)/edit/$', GroupUpdateView.as_view(), name='groups_edit'),
 
-    url(r'^groups/(?P<gid>\d+)/delete/$', 'students.views.groups.groups_delete',name='groups_delete'),
+    url(r'^groups/(?P<pk>\d+)/delete/$', GroupDeleteView.as_view() ,name='groups_delete'),
 
     #Journal  urls
-     url(r'^journal/$', JournalView.as_view(), name='journal'),
+     url(r'^journal/(?P<pk>\d+)?/?$', JournalView.as_view(), name='journal'),
      
     #Exams urls
-    url(r'^exams/$', 'students.views.exams.exams_list',name='exams_list'),
+    url(r'^exams/$', ExamList.as_view(), name='exams_list'),
 
-    url(r'^exams/add/$', 'students.views.exams.exams_add',name='exams_add'),
+    url(r'^exams/add/$', ExamAddView.as_view(),name='exams_add'),
 
-    url(r'^exams/(?P<exid>\d+)/edit/$', 'students.views.exams.exams_edit',name='exams_edit'),
+    url(r'^exams/(?P<pk>\d+)/edit/$', ExamEditView.as_view(),name='exams_edit'),
 
-    url(r'^exams/(?P<exid>\d+)/delete/$', 'students.views.exams.exams_delete',name='exams_delete'),
+    url(r'^exams/(?P<pk>\d+)/delete/$', ExamDeleteView.as_view() ,name='exams_delete'),
 
     #teachers urls
-    url(r'^teachers/$', 'students.views.teachers.teachers_list', name='teachers_list'),
+    url(r'^teachers/$', TeacherList.as_view(), name='teachers_list'),
 
-    url(r'^teachers/add/$', 'students.views.teachers.teachers_add',name='teachers_add'),
+    url(r'^teachers/add/$', TeacherAddView.as_view() ,name='teachers_add'),
 
-    url(r'^teachers/(?P<pk>\d+)/edit/$', 'students.views.teachers.teachers_edit',name='teachers_edit'),
+    url(r'^teachers/(?P<pk>\d+)/edit/$', TeacherUpdateView.as_view() ,name='teachers_edit'),
 
-    url(r'^teachers/(?P<sid>\d+)/delete/$', 'students.views.teachers.teachers_delete',name='teachers_delete'),
+    url(r'^teachers/(?P<pk>\d+)/delete/$', TeacherDeleteView.as_view() ,name='teachers_delete'),
     
     #Contact Admin Form 
     url(r'^contact-admin/$', ContactView.as_view(), name='contact_admin'),
