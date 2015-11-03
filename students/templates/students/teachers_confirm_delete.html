@@ -1,0 +1,23 @@
+{% extends "students/base.html" %}
+
+{% block meta_title %}Видалити викладача {% endblock meta_title %}
+
+{% block title %}Видалити викладача{% endblock title %}
+
+{% load static from staticfiles %}
+
+{%block content%}
+
+<form action="{% url "teachers_delete" object.id %}" method="post">
+	{% csrf_token %}
+
+	<p> Ви дійсно хочете видалати викладача "{{object}}"? </p>
+	<input type="submit" value="Так" name="delete_button" class="btn btn-danger"/>
+	<input type="submit" value="Ні" name="cancel_button" class="btn btn-primary"/>
+
+
+	
+</form>
+
+
+{%endblock content%}
