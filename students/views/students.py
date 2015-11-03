@@ -10,6 +10,7 @@ from datetime import datetime
 
 from django.forms import ModelForm
 from django.views.generic import UpdateView, CreateView, DeleteView
+from django.db.models.deletion import ProtectedError
 
 from crispy_forms.helper import FormHelper 
 from crispy_forms.layout import Submit, HTML
@@ -17,18 +18,24 @@ from crispy_forms.bootstrap import FormActions
 from crispy_forms.layout import Layout, Field
 
 from ..models import Student, Group
-from ..util import paginate
+from ..util import paginate, get_current_group
 
 # Create your views here.
 # Views for students
 def students_list(request):
-	students = Student.objects.all()
+
+	current_group = get_current_group(request)
+	if current_group:
+		students = Student.objects.filter(student_group = current_group)
+	else:
+		students = Student.objects.all()
 	
 	#ordering students 
+
 	order_by=request.GET.get('order_by','')
-	students=students.order_by('last_name')
+	students=students.order_by('last_name')#sort by last_name
 	if request.GET.get('order_by', '') == '':
-		request.GET.order_by = 'last_name'
+		request.GET.order_by = 'last_name' # for the arrow to be visible
 	#order_by = request.GET.get('order_by', '')
 	
 	if order_by in ('last_name','first_name','ticket','id'):
@@ -44,11 +51,13 @@ def students_list(request):
 	# except PageNotAnInteger:
 	# 	# If page is not an integer, deliver first page.
 	# 	students = paginator.page(1)
-	# except EmptyPage:
+	# # except EmptyPage:
 	# 	# If page is out of range (e.g. 9999), deliver last page of results.
 	
-	context = paginate(students, 8, request,{}, var_name = 'students')
 
+	context = paginate(students, 6, request, {}, var_name = 'students')
+
+	# import pdb; pdb.set_trace();
 	return render(request, 'students/students_list.html', context)
 
 
@@ -106,7 +115,6 @@ class StudentCreateView(CreateView):
 
 		return context
 
-	
 
 
 
