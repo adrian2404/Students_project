@@ -7,7 +7,7 @@
 {% load static from staticfiles %}
 
 {%block content%}
-<a href="{% url "students_add" %}" class="btn btn-primary">Додати Студента</a>
+<a href="{% url "students_add" %}" class="btn btn-primary edit-form-link" >Додати Студента</a>
 					{% if students %}
 					<!-- Start table-->
 					<table class="table"> 
@@ -54,8 +54,8 @@
 								<img class="img-circle" src="{% static "img/default-user.png" %}" height="30" width="30">
 								{%endif%}
 								</td>
-								<td><a href="{% url "students_edit" student.id %}">{{student.last_name}}</a></td>
-								<td><a href="{% url "students_edit" student.id %}">{{student.first_name}}</a></td>
+								<td><a href="{% url "students_edit" student.id %}" class="edit-form-link">{{student.last_name}}</a></td>
+								<td><a href="{% url "students_edit" student.id %}" class="edit-form-link">{{student.first_name}}</a></td>
 								<td><a href="#">{{student.ticket}}</a></td>
 								<td>
 									<div class="btn-group">
@@ -64,8 +64,8 @@
 									    <span class="caret"></span>
 									  </button>
 										  <ul class="dropdown-menu" role="menu">
-											    <li><a href="{% url "students_edit" student.id %}">Редагувати</a></li>
-											    <li><a href="/journal/{{students.id}}">Відвідування</a></li>
+											    <li><a href="{% url "students_edit" student.id %}" class="student-edit-form-link">Редагувати</a></li>
+											    <li><a href="{% url "journal" student.id %}">Відвідування</a></li>
 											    <li><a href="{% url "students_delete" student.id %}">Видалити</a></li>
 											    <li><a href="{% url "students_delete_several"  %}">Видалити декількох</a></li>
 											
