@@ -34,6 +34,7 @@ MEDIA_ROOT= os.path.join(BASE_DIR, '..', 'media')
 # Application definition
 
 INSTALLED_APPS = (
+    'django_pdb',
     'django.contrib.admin',
     'django.contrib.auth',
     'django.contrib.contenttypes',
@@ -53,6 +54,7 @@ MIDDLEWARE_CLASSES = (
     'django.contrib.messages.middleware.MessageMiddleware',
     'django.middleware.clickjacking.XFrameOptionsMiddleware',
     'django.middleware.locale.LocaleMiddleware',
+    'django_pdb.middleware.PdbMiddleware',
 )
 
 CRISPY_TEMPLATE_PACK = 'bootstrap3'
@@ -96,6 +98,7 @@ TEMPLATE_CONTEXT_PROCESSORS = \
     global_settings.TEMPLATE_CONTEXT_PROCESSORS + (
     "django.core.context_processors.request",
     "studentsdb.context_processors.students_proc",
+    "students.context_processors.groups_processor",
     'django.contrib.messages.context_processors.messages',
     )
 
