@@ -54,3 +54,14 @@ label{
 select, textarea, input{
 	max-width: 300px;
 }
+
+/* journal styles */
+th.day-box, th.day-header{
+	padding: 4px !important;
+	vertical-align: middle !important;
+	text-align: center;
+}
+
+#ajax-progress-indicator{
+	display: none;
+}
