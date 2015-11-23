@@ -4,7 +4,7 @@ from django.shortcuts import render
 from django.http import HttpResponse, HttpResponseRedirect
 from django.core.urlresolvers import reverse
 
-from ..models import Group
+from ..models import Group, Student
 from ..util import paginate
 
 from django.views.generic import ListView, CreateView, UpdateView, DeleteView
@@ -166,12 +166,26 @@ class GroupUpdateView(BaseGroupFormView, UpdateView):
 
         return context
 
-    # def post(self, request, *args, **kwargs):
-    #     # import pdb; pdb.set_trace()
-    #     if request.POST.get('cancel_button'):
-    #         return HttpResponseRedirect(u'%s?status_message=Редагування групи відмінено!'%reverse('groups_list'))
-    #     else:
-    #         return super(BaseGroupFormView, self).post(request, *args, **kwargs)
+    def post(self, request, *args, **kwargs):
+        # import pdb; pdb.set_trace()
+        if request.POST.get('cancel_button'):
+            return HttpResponseRedirect(u'%s?status_message=Редагування групи відмінено!'%reverse('groups_list'))
+        # else:
+        #     return super(BaseGroupFormView, self).post(request, *args, **kwargs)
+        try:
+            leader = long(request.POST.get('leader'))
+        except ValueError:
+            return super(BaseGroupFormView, self).post(request, *args, **kwargs)
+
+        group = self.get_object().id
+        students = Student.objects.filter(student_group=group).values_list('id', flat=True)
+        # import pdb; pdb.set_trace()
+        if leader not in students:
+            return HttpResponseRedirect(u'%s?status_message=Студент має належати до цієї групи'%reverse('groups_edit', args = [group]))
+        else:
+            return super(BaseGroupFormView, self).post(request, *args, **kwargs)
+
+
         
 
 class GroupDeleteView(BaseGroupFormView, DeleteView):
