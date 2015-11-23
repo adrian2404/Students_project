@@ -20,7 +20,6 @@ class StudentFormAdmin(ModelForm):
             raise ValidationError(u'Студент є старостою іншої групи', code = "invalid")
         
         return self.cleaned_data['student_group']
-        
 
 class StudentAdmin(admin.ModelAdmin):
     list_display = ['last_name', 'first_name', 'ticket', 'student_group']
@@ -36,12 +35,29 @@ class StudentAdmin(admin.ModelAdmin):
     
     def view_on_site(self, obj):
 	return reverse('students_edit', kwargs={'pk':obj.id})
+
+
+class GroupFormAdmin(ModelForm):
+    def clean_leader(self):
+        students = Student.objects.filter(student_group=self.instance)
+        if self.cleaned_data['leader'] not in students:
+            raise ValidationError(u'Студент має належити до цієї групи', code="invalid")
+
+        return self.cleaned_data['leader']
+
+	    
+
+class GroupAdmin(admin.ModelAdmin):
+    form = GroupFormAdmin
+    
+    def view_on_site(self, obj):
+        return reverse('groups_edit', kwargs={'pk':obj.id})
 	
     
     
 
 admin.site.register(Student, StudentAdmin)
-admin.site.register(Group)
+admin.site.register(Group, GroupAdmin)
 admin.site.register(Exam)
 admin.site.register(MonthJournal)
 admin.site.register(Teacher)
