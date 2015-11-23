@@ -4,6 +4,7 @@ from django.core.paginator import Paginator, EmptyPage, PageNotAnInteger
 def paginate(objects, size, request, context, var_name='object_list'):
     """Paginate objects provided by view"""
     # apply pagination
+
     paginator = Paginator(objects, size)
     page = request.GET.get('page', '1')
     try:
@@ -20,6 +21,7 @@ def paginate(objects, size, request, context, var_name='object_list'):
     context['page_obj'] = object_list
     context['paginator'] = paginator
 
+    # import pdb; pdb.set_trace();
     return context
 
 
