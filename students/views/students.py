@@ -9,7 +9,7 @@ from django.contrib.messages import get_messages
 from datetime import datetime
 
 from django.forms import ModelForm
-from django.views.generic import UpdateView, CreateView, DeleteView
+from django.views.generic import UpdateView, CreateView, DeleteView, ListView
 from django.db.models.deletion import ProtectedError
 
 from crispy_forms.helper import FormHelper 
@@ -21,45 +21,77 @@ from ..models import Student, Group
 from ..util import paginate, get_current_group
 
 # Create your views here.
-# Views for students
-def students_list(request):
+# # Views for students
+# def students_list(request):
 
-	current_group = get_current_group(request)
-	if current_group:
-		students = Student.objects.filter(student_group = current_group)
-	else:
-		students = Student.objects.all()
+# 	current_group = get_current_group(request)
+# 	if current_group:
+# 		students = Student.objects.filter(student_group = current_group)
+# 	else:
+# 		students = Student.objects.all()
 	
-	#ordering students 
+# 	#ordering students 
 
-	order_by=request.GET.get('order_by','')
-	students=students.order_by('last_name')#sort by last_name
-	if request.GET.get('order_by', '') == '':
-		request.GET.order_by = 'last_name' # for the arrow to be visible
-	#order_by = request.GET.get('order_by', '')
+# 	order_by=request.GET.get('order_by','')
+# 	students=students.order_by('last_name')#sort by last_name
+# 	if request.GET.get('order_by', '') == '':
+# 		request.GET.order_by = 'last_name' # for the arrow to be visible
+# 	#order_by = request.GET.get('order_by', '')
 	
-	if order_by in ('last_name','first_name','ticket','id'):
-		students=students.order_by(order_by)
-		if request.GET.get('reverse','')=='1':
-			students=students.reverse()
+# 	if order_by in ('last_name','first_name','ticket','id'):
+# 		students=students.order_by(order_by)
+# 		if request.GET.get('reverse','')=='1':
+# 			students=students.reverse()
 	
-	# #paginate students
-	# paginator = Paginator(students, 6)
-	# page = request.GET.get('page')
-	# try:
-	# 	students = paginator.page(page)
-	# except PageNotAnInteger:
-	# 	# If page is not an integer, deliver first page.
-	# 	students = paginator.page(1)
-	# # except EmptyPage:
-	# 	# If page is out of range (e.g. 9999), deliver last page of results.
+# 	# #paginate students
+# 	# paginator = Paginator(students, 6)
+# 	# page = request.GET.get('page')
+# 	# try:
+# 	# 	students = paginator.page(page)
+# 	# except PageNotAnInteger:
+# 	# 	# If page is not an integer, deliver first page.
+# 	# 	students = paginator.page(1)
+# 	# # except EmptyPage:
+# 	# 	# If page is out of range (e.g. 9999), deliver last page of results.
 	
 
-	context = paginate(students, 6, request, {}, var_name = 'students')
+# 	context = paginate(students, 6, request, {}, var_name = 'students')
 
-	# import pdb; pdb.set_trace();
-	return render(request, 'students/students_list.html', context)
+# 	# import pdb; pdb.set_trace();
+# 	return render(request, 'students/students_list.html', context)
 
+
+class StudentList(ListView):
+	template_name = 'students/students_list.html'
+	model = Student
+	template_object_name = "students"
+
+
+	def get_context_data(self, **kwargs):
+		context = super(StudentList, self).get_context_data(**kwargs)
+		context = paginate(self.object_list, 6, self.request, {}, var_name = 'students')
+
+		return context
+
+	def get_queryset(self):
+
+		current_group = get_current_group(self.request)
+		if current_group:
+			students = Student.objects.filter(student_group = current_group)
+		else:
+			students = Student.objects.all()
+
+		order_by = self.request.GET.get('order_by',)
+		if (order_by == ''):
+			self.request.GET.order_by = 'last_name'
+		if(order_by in ('first_name', 'last_name', 'id', 'ticket')):
+			students = students.order_by(order_by)
+			if self.request.GET.get('reverse','') == '1':
+				students = students.reverse()
+		else:
+			students = students.order_by('last_name')
+
+		return students
 
 class StudentCreateForm(ModelForm):
 	class Meta:
@@ -254,6 +286,16 @@ class StudentUpdateView(UpdateView):
 	def post(self, request, *args, **kwargs):
 		if request.POST.get('cancel_button'):
 			return HttpResponseRedirect(u'%s?status_message=Редагування студента відмінено!'%reverse('home'))
+
+		# try:
+		# 	student_group = long(request.POST.get('student_group'))
+		# except:
+		# 	return super(StudentUpdateView, self).post(request, *args, **kwargs)
+		student_id = self.get_object().id
+		student_group = self.get_object().student_group.id	
+		groups = Group.objects.filter(leader=student_id).values_list('id', flat=True)
+		if len(groups)>0 and long(request.POST.get('student_group'))!=groups[0]:
+			return HttpResponseRedirect(u'%s?status_message=Студент є старостою іншої групи'%reverse('students_edit', args = [student_id]))
 		else:
 			return super(StudentUpdateView, self).post(request, *args, **kwargs)
 
