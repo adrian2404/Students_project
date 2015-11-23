@@ -42,6 +42,8 @@ INSTALLED_APPS = (
     'django.contrib.messages',
     'django.contrib.staticfiles',
     'crispy_forms',
+    'django_extensions',
+    'registration',
     'students',
 )
 
@@ -56,6 +58,8 @@ MIDDLEWARE_CLASSES = (
     'django.middleware.locale.LocaleMiddleware',
     'django_pdb.middleware.PdbMiddleware',
 )
+
+SESSION_ENGINE = 'django.contrib.sessions.backends.db'
 
 CRISPY_TEMPLATE_PACK = 'bootstrap3'
 
