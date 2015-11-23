@@ -128,7 +128,7 @@ class JournalView(TemplateView):
         
         #return success status
         # import pdb; pdb.set_trace()
-        response = JsonResponse({'key' : 'success'})
+        response = JsonResponse({'status' : 'success'})
         return response
 
     
