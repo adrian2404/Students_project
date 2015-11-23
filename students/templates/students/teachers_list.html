@@ -56,7 +56,13 @@
 								</td>
 								<td><a href="{% url "teachers_edit" teacher.id %}" class="edit-form-link">{{teacher.last_name}}</a></td>
 								<td><a href="{% url "teachers_edit" teacher.id %}" class="edit-form-link">{{teacher.first_name}}</a></td>
-								<td>{{teacher.subject}}</td>
+								<td>
+                  <ul>
+                    {% for exam in teacher.exam_set.all %}
+                    <li>{{ exam.name }}</li>
+                  </ul>
+                    {% endfor %}
+                </td>
 								<td>
 									<div class="btn-group">
 									  <button type="button" class="btn btn-default dropdown-toggle" data-toggle="dropdown" aria-expanded="false">
