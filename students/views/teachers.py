@@ -4,7 +4,7 @@ from django.shortcuts import render
 from django.http import HttpResponse, HttpResponseRedirect
 from django.core.urlresolvers import reverse
 
-from ..models import Teacher
+from ..models import Teacher, Exam
 from ..util import paginate
 
 from django.views.generic import ListView, CreateView, UpdateView, DeleteView
@@ -58,12 +58,14 @@ class TeacherList(ListView):
 	template_name = 'students/teachers_list.html'
 
 	def get_context_data(self, **kwargs):
-
-		
 		context = super(TeacherList, self).get_context_data(**kwargs)
 
+		# exams = Exam.objects.filter()
+		
+		
 		context = paginate(self.object_list, 4, self.request, {}, var_name='teachers')
-
+		context['exams'] = Exam.objects.all()
+		# import pdb; pdb.set_trace();
 		return context
 
 	def get_queryset(self):
@@ -149,6 +151,7 @@ class TeacherAddView(BaseTeacherFormView, CreateView):
 
 		context = super(TeacherAddView, self).get_context_data(**kwargs)
 		context['name'] = 'Додати'
+
 
 		return context
 
