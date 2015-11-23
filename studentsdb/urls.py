@@ -3,7 +3,7 @@ from django.contrib import admin
 from django.contrib.staticfiles.urls import staticfiles_urlpatterns
 from .settings import MEDIA_ROOT, DEBUG
 
-from students.views.students import StudentUpdateView, StudentCreateView, StudentDeleteView
+from students.views.students import StudentUpdateView, StudentCreateView, StudentDeleteView, StudentList
 from students.views.groups import GroupList, GroupAddView, GroupUpdateView,GroupDeleteView 
 from students.views.exams import ExamList, ExamAddView, ExamEditView, ExamDeleteView
 from students.views.teachers import TeacherList, TeacherAddView, TeacherUpdateView, TeacherDeleteView
@@ -12,7 +12,7 @@ from students.views.journal import JournalView
 
 urlpatterns = patterns('',
     # Examples:
-    url(r'^$', 'students.views.students.students_list', name='home'),
+    url(r'^$', StudentList.as_view(), name='home'),
     # url(r'^blog/', include('blog.urls')),
     #Student urls
     url(r'^students/add/$', StudentCreateView.as_view(),name='students_add'),
