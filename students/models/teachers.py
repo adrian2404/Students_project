@@ -1,5 +1,6 @@
 # -*- coding: utf-8 -*-
 from django.db import models
+from django.contrib.auth.models import User
 
 class Teacher(models.Model):
     """Group model"""
@@ -7,6 +8,9 @@ class Teacher(models.Model):
     class Meta(object):
         verbose_name=u"Викладач"
         verbose_name_plural= "Викладачі"
+        permissions = (
+            ("contact_student", "Teacher can contact student"),
+        )
 
 
 
@@ -39,6 +43,15 @@ class Teacher(models.Model):
     blank=True,
     verbose_name=u"Фото",
     null=True)
+
+    notes = models.TextField(
+    blank = True,
+    verbose_name = u"Нотатки")
+
+    user = models.OneToOneField(User,
+    blank=True,
+    null=True,
+    verbose_name='Користувач')
 
 
 

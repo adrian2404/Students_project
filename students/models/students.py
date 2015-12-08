@@ -1,5 +1,6 @@
 # -*- coding: utf-8 -*-
 from django.db import models
+from django.contrib.auth.models import User
 
 # Create your models here.
 class Student(models.Model):
@@ -7,7 +8,12 @@ class Student(models.Model):
 
     class Meta(object):
         verbose_name=u"Студент"
-        verbose_name_plural= "Студенти" 
+        verbose_name_plural= "Студенти"
+        permissions = (
+            ("contact_teacher", "Student can contact teacher"),
+            ("group_leader", "Permission for managing the journal")
+        )
+         
 
 
     first_name = models.CharField(
@@ -56,6 +62,13 @@ class Student(models.Model):
     blank=True,
     verbose_name=u"Нотатки")
 
+    user = models.OneToOneField(User,
+    verbose_name="Користувач",
+    blank=True,
+    null=True)
+
     def __unicode__(self):
         return u"%s %s" % (self.first_name, self.last_name)
+
+
      
