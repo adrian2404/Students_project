@@ -45,6 +45,7 @@ INSTALLED_APPS = (
     'django_extensions',
     'registration',
     'students',
+    'studentsdb'
 )
 
 MIDDLEWARE_CLASSES = (
@@ -67,10 +68,17 @@ ROOT_URLCONF = 'studentsdb.urls'
 
 WSGI_APPLICATION = 'studentsdb.wsgi.application'
 
+REGISTRATION_OPEN = True
+LOGIN_URL = 'users:auth_login'
+LOGOUT_URL = 'users:auth_logout'
+# LOGIN_REDIRECT_URL = 'home'
 
 # Database
 # https://docs.djangoproject.com/en/1.7/ref/settings/#databases
 
+TEMPLATE_DIRS = (
+    os.path.join(BASE_DIR, 'studentsdb', 'templates'),
+    )
 
 from .db import DATABASES
 

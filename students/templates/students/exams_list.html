@@ -7,10 +7,12 @@
 {% load static from staticfiles %}
 
 {%block content%}
+{% if perms.students.add_student %}
 <a href="{% url "exams_add" %}" class="btn btn-primary">Додати Екзамен</a>
+{% endif %}
 					{% if exams %}
 					<!-- Start table-->
-					<table class="table"> 
+					<table class="table table-modified"> 
 					{% with order_by=request.GET.order_by reverse=request.GET.reverse %}
 						<thead>
 							<tr>
@@ -37,17 +39,26 @@
 								</a>
 								</th>
 								
-								<th>Дії</th> 
+								{% if perms.students.add_student %}<th>Дії</th>{% endif %}
 							</tr>
 						</thead>
 						<tbody>
 							{% for exam in exams %}
 							<tr>
 								<td>{{exam.id}}</td>
-								<td><a href="{% url "exams_edit" exam.id %}" class="edit-form-link">{{exam.name}}</a></td>
-                                <td>{{exam.date|date:"d.m.Y, H:i"}}</td>
-                                <td>{% if exam.exam_teacher %}<a href="{% url "teachers_edit" exam.exam_teacher.id %}" class="edit-form-link">{{exam.exam_teacher}} </a>{% else %}Нема викладача{% endif %}</td>
-								<td><a href="{% url "groups_edit" exam.groups.id %}" class="edit-form-link">{{exam.groups}}</a></td>
+								<td>
+								{% if  perms.students.add_student %}
+								<a href="{% url "exams_edit" exam.id %}" class="edit-form-link">{{exam.name}}</a>
+								{% else %} {{exam.name}} {% endif %}
+								</td>
+                <td>{{exam.date|date:"d.m.Y, H:i"}}</td>
+                <td> {% if exam.exam_teacher %}{% if  perms.students.add_student %}<a href="{% url "teachers_edit" exam.exam_teacher.id %}" class="edit-form-link">{{exam.exam_teacher}} </a>{% else %} {{exam.exam_teacher}} {% endif %} {% else %}Немає викладача{% endif %}</td>
+								<td>
+								{% if perm.auth.add_user %}
+								<a href="{% url "groups_edit" exam.groups.id %}" class="edit-form-link">{{exam.groups}}</a>
+								{% else %} {{exam.groups}} {% endif %}
+								</td>
+								{% if  perms.students.add_student %}
 								<td>
 									<div class="btn-group">
 									  <button type="button" class="btn btn-default dropdown-toggle" data-toggle="dropdown" aria-expanded="false">
@@ -61,6 +72,7 @@
 										  </ul>
 									</div>
 								</td>
+								{% endif %}
 							</tr> 
 							{% endfor %}
 						</tbody>

@@ -36,7 +36,7 @@ class ContactForm(forms.Form):
 		# form tag attributes
 		self.helper.form_class = 'form-horizontal'
 		self.helper.form_mehtod = 'post'
-		self.helper.form_action = reverse('contact_teacher')
+		self.helper.form_action = reverse('contact_group')
 
 		#twitter bootstrap styles
 
@@ -48,62 +48,51 @@ class ContactForm(forms.Form):
 		#form buttons 
 		self.helper.add_input(Submit('send_button',u'Надіслати'))
 	
-	from .teachers import Teacher
-	teacher = forms.ModelChoiceField(queryset = Teacher.objects.all(), empty_label="Обрати викладача",label=u"Викладач", to_field_name='user')
+	from .groups import Group
+	group = forms.ModelChoiceField(queryset = Group.objects.all(), empty_label="Обрати групу",label=u"Група")
 
 	subject = forms.CharField(label=u"Заголовок листа", max_length = 128)
 
 	message = forms.CharField(label=u"Текст повідомлення", max_length=2560, widget = forms.Textarea)
 
 
-class ContactTeacher(FormView):
+class ContactGroup(FormView):
 	
-	template_name="contact_admin/form.html"
+	template_name="students/contact_form.html"
 	form_class = ContactForm
+
+	def get_context_data(self, *args, **kwargs):
+
+	    context = super(ContactGroup, self).get_context_data(*args, **kwargs)
+	    context["name"] = "Групою"
+
+	    return context
 	# success_message="Повідомлення успішно відправлено."
 #	success_url=reverse_lazy('contact_admin')
        
 	def get_success_url(self):
-    	    return reverse('contact_teacher')
+    	    return reverse('contact_group')
 
 	def form_valid(self,form):
-	    import pdb; pdb.set_trace();
-	    teacher = form.cleaned_data['teacher']
-	    teacher_email = teacher.user.email
+	    # import pdb; pdb.set_trace();
+	    # if leader has no email attached
+	    try:
+	    	group = form.cleaned_data['group']
+	    	group_email = group.leader.user.email
+	    except:
+	    	return HttpResponseRedirect(u'%s?status_message=Помилка на сервері'%reverse('contact_group'))
+	    
 	    subject = form.cleaned_data['subject']
-     	    message = form.cleaned_data['message']
-    	    from_email = form.cleaned_data['teacher']
+    	    message = form.cleaned_data['message']
+    	    
 
-    	    send_mail(subject, message, 'Student DB', [teacher_email])
+    	    send_mail(subject, message, 'Student DB', [group_email])
     	    # email_user(subject, message)
-            storage = get_messages(self.request)
-            for message in storage:
-               pass
-            messages.add_message(self.request, messages.INFO, "Повідомлення успішно відправлено.")
-    	    return super(ContactTeacher, self).form_valid(form)
+    	    storage = get_messages(self.request)
+    	    for message in storage:
+        	pass
+    	    messages.add_message(self.request, messages.INFO, "Повідомлення успішно відправлено.")
+    	    return super(ContactGroup, self).form_valid(form)
 
 	
 
-		
-# def contact_admin(request):
-#     if request.method == 'POST':
-#     	form = ContactForm(request.POST)
-
-#     	# check wether user data is valid
-#     	if form.is_valid():
-#     		subject = form.cleaned_data['subject']
-#     		message = form.cleaned_data['message']
-#     		from_email = form.cleaned_data['from_email']
-# 	    	try:
-# 	    		send_mail(subject, message + "\n\n Message was sent from: " + from_email, 'Student DB', [ADMIN_EMAIL])
-# 	    	except Exception:
-# 	    		message = u"Під час відправки листа виникла помилка. Спробуйте пізніше."
-# 	    	else:
-# 	    		message = u"Повідомлення успішно надіслано"
-	    	
-# 	    	return HttpResponseRedirect(u'%s?status_message=%s' % (reverse(contact_admin), message))
-    
-#     else:
-#     	form = ContactForm()
-
-#     return render(request, 'contact_admin/form.html',{'form':form})

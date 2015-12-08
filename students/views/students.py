@@ -20,6 +20,9 @@ from crispy_forms.layout import Layout, Field
 from ..models import Student, Group
 from ..util import paginate, get_current_group
 
+from django.utils.decorators import method_decorator
+from django.contrib.auth.decorators import login_required
+
 # Create your views here.
 # # Views for students
 # def students_list(request):
@@ -59,6 +62,8 @@ from ..util import paginate, get_current_group
 
 # 	# import pdb; pdb.set_trace();
 # 	return render(request, 'students/students_list.html', context)
+
+
 
 
 class StudentList(ListView):
@@ -119,7 +124,7 @@ class StudentCreateForm(ModelForm):
 
     	    break_message= u"Додавання студента відмінено"
     	    self.helper.layout[-1]= Layout(
-    	    	Field('notes',css_class='input-xlarge',),
+    	    	
     	    	FormActions(
             Submit('add_button',u'Зберегти', css_class="btn btn-priamry"),
             HTML("<a class='btn btn-link' id = 'cancel-id-send_button' href='{% url 'home' %}?status_message="+break_message+"' name = 'cancel_button'>"+u'Скасувати'+"</a>"),
@@ -131,6 +136,10 @@ class StudentCreateView(CreateView):
 	model = Student
 	template_name = "students/students_universal.html"
 	form_class = StudentCreateForm
+
+	@method_decorator(login_required)
+	def dispatch(self, *args, **kwargs):
+		return super(StudentCreateView, self).dispatch(*args, **kwargs)
 
 	def get_success_url(self):
 		return u'%s?status_message=Студента успішно збережено!'%reverse('home')
@@ -268,7 +277,7 @@ class StudentUpdateForm(ModelForm):
         self.helper.field_class = 'col-sm-10'
 
         self.helper.layout[-1]= Layout(
-    	    	Field('notes',css_class='input-xlarge'),
+    	    	
     	    	FormActions(
             Submit('add_button',u'Зберегти', css_class="btn btn-priamry"),
             Submit('cancel_button',u'Скасувати', css_class="btn btn-link"),
@@ -310,9 +319,13 @@ class StudentDeleteView(DeleteView):
 	model = Student
 	template_name  = "students/students_confirm_delete.html"
 
+	@method_decorator(login_required)
+	def dispatch(self, *args, **kwargs):
+		return super(StudentDeleteView, self).dispatch(*args, **kwargs)
+
 	def get_success_url(self):
 		return u'%s?status_message=Студента успішно видалено!'%reverse('home')
-
+@login_required
 def students_delete(request, sid):
     if request.method == 'POST':
         if "delete_button" in request.POST:

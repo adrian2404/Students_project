@@ -16,10 +16,12 @@
 </div>
 
 {% else %}
+{% if  perms.students.group_leader %}
 <div class="alert alert-warning">
 	Змін в журнал зберігаються автоматично при кожному кліку в клітинці
 	<span id="ajax-progress-indicator">Йде збереження... </span>
 </div>
+{% endif %}
 
 <p id="journal-nav" class="text-center">
   <a href="?month={{ prev_month }}"
@@ -71,11 +73,17 @@
       </td>
 
       {% for day in student.days %}
+      {% if perms.students.group_leader %}
       <td class="day-box">
         <input type="checkbox" data-student-id="{{ student.id }}"
                data-date="{{ day.date }}" data-url="{{ student.update_url }}"
                value="1"{% if day.present %} checked="checked" {% endif %} />
       </td>
+      {% else %}
+      <td class="day-box">
+        <input type="checkbox"{% if day.present %} checked="checked" {% endif %} disabled />
+      </td>
+      {% endif %}
       {% endfor %}
 
     </tr>

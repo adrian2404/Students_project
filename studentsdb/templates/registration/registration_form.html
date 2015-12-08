@@ -1,0 +1,44 @@
+{% extends "students/base.html" %}
+
+{% block meta_title %}Форма реєстрації {% endblock meta_title %}
+
+{% block title %}Реєстрація{% endblock title %}
+{% block status_message %}
+{% if form.errors %}
+<div class="alert alert-warning" role="alert">Виправіть будь ласка помилки{{ form.non_field_errors }}</div>
+{% endif %}
+{% endblock %}
+
+{%block content%}
+<form action="{% url "users:registration_register" %}" method="post">
+	{% csrf_token %}
+	<input type="hidden" name="next" value="{% url "home" %}">
+
+	<div class="form-group">
+		<label for="login">Ваше ім'я на сайті</label>
+		<input type="text" class="form-control" id="login" value="{{request.POST.username}}" name="username">
+		<span class="help-block">{{ form.errors.username.as_text }}</span>
+	</div>
+
+	<div class="form-group">
+		<label for="email">Email</label>
+		<input type="text" class="form-control" id="email" value="{{request.POST.email}}" name="email">
+		<span class="help-block">{{ form.errors.email.as_text }}</span
+	</div>
+
+	<div class="form-group">
+		<label for="password">Пароль</label>
+		<input type="password" class="form-control" id="password" value="" name="password1">
+		<span class="help-block">{{ form.errors.password1.as_text }}</span>
+	</div>
+
+		<div class="form-group">
+		<label for="password-confirm">Підтвердження паролю</label>
+		<input type="password" class="form-control" id="password-confirm" value="" name="password2">
+		<span class="help-block">{{ form.errors.password2.as_text }}</span>
+	</div>
+
+	<button type="submit" class="btn btn-primary">Зареєструватись</button>
+</form>
+
+{%endblock content%}

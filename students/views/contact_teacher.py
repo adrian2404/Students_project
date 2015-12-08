@@ -49,7 +49,7 @@ class ContactForm(forms.Form):
 		self.helper.add_input(Submit('send_button',u'Надіслати'))
 	
 	from .teachers import Teacher
-	teacher = forms.ModelChoiceField(queryset = Teacher.objects.all(), empty_label="Обрати викладача",label=u"Викладач", to_field_name='user')
+	teacher = forms.ModelChoiceField(queryset = Teacher.objects.all(), empty_label="Обрати викладача",label=u"Викладач")
 
 	subject = forms.CharField(label=u"Заголовок листа", max_length = 128)
 
@@ -58,28 +58,37 @@ class ContactForm(forms.Form):
 
 class ContactTeacher(FormView):
 	
-	template_name="contact_admin/form.html"
+	template_name="students/contact_form.html"
 	form_class = ContactForm
 	# success_message="Повідомлення успішно відправлено."
 #	success_url=reverse_lazy('contact_admin')
+	def get_context_data(self, *args, **kwargs):
+
+	    context = super(ContactTeacher, self).get_context_data(*args, **kwargs)
+	    context["name"] = "Викладачем"
+
+	    return context
        
 	def get_success_url(self):
     	    return reverse('contact_teacher')
 
 	def form_valid(self,form):
-	    import pdb; pdb.set_trace();
-	    teacher = form.cleaned_data['teacher']
-	    teacher_email = teacher.user.email
+	    # import pdb; pdb.set_trace();
+	    try:
+		teacher = form.cleaned_data['teacher']
+		teacher_email = teacher.user.email
+    	    except:
+		return HttpResponseRedirect(u'%s?status_message=Помилка на сервері'%reverse('contact_teacher'))
 	    subject = form.cleaned_data['subject']
      	    message = form.cleaned_data['message']
     	    from_email = form.cleaned_data['teacher']
 
     	    send_mail(subject, message, 'Student DB', [teacher_email])
     	    # email_user(subject, message)
-            storage = get_messages(self.request)
-            for message in storage:
-               pass
-            messages.add_message(self.request, messages.INFO, "Повідомлення успішно відправлено.")
+    	    storage = get_messages(self.request)
+    	    for message in storage:
+    		pass
+    	    messages.add_message(self.request, messages.INFO, "Повідомлення успішно відправлено.")
     	    return super(ContactTeacher, self).form_valid(form)
 
 	

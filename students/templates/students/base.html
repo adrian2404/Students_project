@@ -22,10 +22,11 @@
 			<!-- Start Header -->
 			<div class="row" id="header">
 				<!--Logo-->
-				<div class="col-xs-8">
-					<a href="{% url "home"%}"><h1>Сервіс обліку студентів</h1></a>
+				<div class="col-xs-6">
+					<a href="{% url "home"%}" id="logo"><h1>Сервіс обліку студентів</h1></a>
 				</div>
 				<!--Selector-->
+				{% if user.is_authenticated %}
 				<div class="col-xs-4" id="group-selector">
 					<strong>Група:</strong>
 					<select>
@@ -35,6 +36,20 @@
 			          {% endfor %}
 			        </select>
 				</div>
+
+				<!-- User's toolbar for autheticated users -->
+				<div class="col-xs-2" id="user-toolbar">
+					<a href="{% url "profile" %}">{{ user.get_full_name|default:user.username }}</a> |
+					<a href="{% url "users:auth_logout" %}">Вийти</a>
+				</div>
+				{% else %}
+
+				<!-- User's toolbar for anonymous users -->
+				<div class="col-xs-6" id="user-toolbar">
+					<a href="{% url "users:auth_login" %}">Увійти</a> |
+					<a href="{% url "users:registration_register" %}">Реєстрація</a>
+				</div>
+				{% endif %}
 			</div>
 			{% endblock header%}
 			<!--End header-->
@@ -55,8 +70,19 @@
 							  <li role="presentation" {% if exams_list in request.path  %}class="active"{%endif%}><a href="{% url "exams_list"%}" class="new-content-url">Екзамени</a></li>
 							  {% url "teachers_list" as teachers %}
 							   <li role="presentation" {% if teachers in request.path  %}class="active"{%endif%}><a href="{% url "teachers_list" %}" class="new-content-url">Викладачі</a></li>
-							  {% url "contact_admin" as contact_admin %}
-							   <li role="presentation" {% if contact_admin in request.path  %}class="active"{%endif%}><a href="{% url "contact_admin" %}" class="new-content-url">Зворотній зв'язок</a></li>
+							   
+							   {% if perms.students.contact_teacher %}
+							   {% url "contact_teacher" as contact_teacher %}
+							   <li role="presentation" {% if contact_teacher in request.path  %}class="active"{%endif%}><a href="{% url "contact_teacher" %}" class="new-content-url">Зв'язатися із викладачем</a></li>
+							   {% endif %}
+
+							   {% if perms.students.contact_student %}
+							   {% url "contact_group" as contact_group %}
+							   <li role="presentation" {% if contact_group in request.path  %}class="active"{%endif%}><a href="{% url "contact_group" %}" class="new-content-url">Зв'язатися із групою</a></li>
+							   {% endif %}
+                 {% url "students_stats" as students_stats %}
+							   <li role="presentation" {% if students_stats in request.path  %}class="active"{%endif%}><a href="{% url "students_stats" %}" class="new-content-url">Статистика відвідування</a></li>
+
 							</ul>
 						</div>	
 					</div>
