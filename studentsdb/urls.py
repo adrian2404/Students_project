@@ -7,10 +7,24 @@ from students.views.students import StudentUpdateView, StudentCreateView, Studen
 from students.views.groups import GroupList, GroupAddView, GroupUpdateView,GroupDeleteView 
 from students.views.exams import ExamList, ExamAddView, ExamEditView, ExamDeleteView
 from students.views.teachers import TeacherList, TeacherAddView, TeacherUpdateView, TeacherDeleteView
-from students.views.contact_admin import ContactView
+from students.views.contact_teacher import ContactTeacher
+from students.views.contact_group import ContactGroup
 from students.views.journal import JournalView
+from django.views.generic.base import RedirectView, TemplateView
+
+from django.contrib.auth import views as auth_views
+
+from django.contrib.auth.decorators import login_required
 
 urlpatterns = patterns('',
+    # User Related urls
+    url(r'^users/logout/$', auth_views.logout, kwargs={'next_page':'home'}, name='auth_logout'),
+
+    url(r'^register/complete/$', RedirectView.as_view(pattern_name='home'),name='registration_complete'),
+    url(r'^users/profile/$', login_required(TemplateView.as_view(template_name='registration/profile.html')), name='profile'),
+    
+    url(r'^users/', include('registration.backends.simple.urls', namespace='users')),
+
     # Examples:
     url(r'^$', StudentList.as_view(), name='home'),
     # url(r'^blog/', include('blog.urls')),
@@ -23,12 +37,15 @@ urlpatterns = patterns('',
     
     url(r'^students/delete_several/$','students.views.students.students_delete_several',name='students_delete_several'),
 
+    url(r'^students/stats/$','students.views.stats.presense_stats',name='students_stats'),
+
+
     url(r'^admin/', include(admin.site.urls)),
 
     #Group urls
     url(r'^groups/$', GroupList.as_view(), name='groups_list'),
 
-    url(r'^groups/add/$', GroupAddView.as_view(), name='groups_add'),
+    url(r'^groups/add/$', login_required(GroupAddView.as_view()), name='groups_add'),
 
     url(r'^groups/(?P<pk>\d+)/edit/$', GroupUpdateView.as_view(), name='groups_edit'),
 
@@ -56,7 +73,8 @@ urlpatterns = patterns('',
     url(r'^teachers/(?P<pk>\d+)/delete/$', TeacherDeleteView.as_view() ,name='teachers_delete'),
     
     #Contact Admin Form 
-    url(r'^contact-admin/$', ContactView.as_view(), name='contact_admin'),
+    url(r'^contact-teacher/$', ContactTeacher.as_view(), name='contact_teacher'),
+    url(r'^contact-group/$', ContactGroup.as_view(), name='contact_group'),
     
 )
 
