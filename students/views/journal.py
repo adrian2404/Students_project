@@ -11,6 +11,7 @@ from django.views.generic.base import TemplateView
 from ..models import MonthJournal, Student
 from ..util import paginate, get_current_group
 
+from django.contrib.auth.decorators import permission_required
 
 class JournalView(TemplateView):
     template_name = 'students/journal.html'
@@ -107,6 +108,7 @@ class JournalView(TemplateView):
         # with paginated students
         return context
 
+    
     def post(self, request, *args, **kwargs):
         data = request.POST
 

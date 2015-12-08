@@ -119,7 +119,7 @@ class TeacherForm(ModelForm):
 		if add_form:
 			submit = Submit('add_button', u'Додати',css_class="btn btn-primary")
 			self.helper.layout[-1]= Layout(
-                Field('subject',css_class='input-xlarge',),
+
                 FormActions(submit,
             HTML("<a class='btn btn-link' id = 'cancel-id-send_button' href='{% url 'teachers_list' %}?status_message="+break_message+"' name = 'cancel_button'>"+u'Скасувати'+"</a>"),
             ))
