@@ -4,7 +4,8 @@
 }
 
 #group-selector{
-	margin-top: 20px;
+	margin-top: 30px;
+	text-align: right;
 }
 
 #group-selector select{
@@ -15,11 +16,23 @@
 	border: 1px solid #cccccc;
 	line-height: 30px;
 	color: #555555;
+.table-modified}
+.teacher_exam-list{
+	padding-left:15px;
 }
+>tbody>tr>td, .table-modified>thead>tr>th {
+	padding:13px;
+	text-align: left; 
+}
+#user-toolbar{
+	margin-top: 35px;
+	text-align: right;
+}
+
 h1,h2,h3,h4,h5,h6{
 	font-weight: bold;
 }
-.col-xs-8 a{
+#logo{
 	text-decoration: none;
 	color: black;
 }
